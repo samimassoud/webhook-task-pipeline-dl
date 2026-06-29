@@ -4,12 +4,12 @@ on:
     pull_request:
         branches:
             - main
-    paths:
-        - 'app/src/**'
-        - 'app/package.json'
-        - 'app/package-lock.json'
-        - 'app/Dockerfile'
-        - '.github/workflows/ci.yml'
+        paths:
+            - 'app/src/**'
+            - 'app/package.json'
+            - 'app/package-lock.json'
+            - 'app/Dockerfile'
+            - '.github/workflows/ci.yml'
 
 jobs:
     test-and-build:
