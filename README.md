@@ -60,3 +60,78 @@ Kubernetes
   |-- Secrets
   |-- Prometheus
   |-- Grafana
+```
+
+## Running Locally with Docker Compose
+
+This project includes a Docker Compose setup to run the full system locally, including:
+
+- PostgreSQL database  
+- Migration job (Drizzle)  
+- API service  
+- Worker service  
+
+### Prerequisites
+
+- Docker
+- Docker Compose
+
+---
+
+### Start the services
+
+From the project root:
+
+```bash
+docker compose up --build
+```
+This will:
+1. Build the application image (using a multi-stage Dockerfile)
+2. Start PostgreSQL
+3. Wait until the database is healthy
+4. Run database migrations (one-time job)
+5. Start the API and worker services
+
+### Verify everything is running
+Check running containers
+```bash
+docker ps
+```
+You should see:
+- `pipeline_postgres` (healthy)
+- `pipeline_api` (running on port 3000)
+- `pipeline_worker` (running)
+
+### Test the API
+Once the API is up, you can initially test it:
+```bash
+curl http://localhost:3000/api/v1/pipelines
+curl http://localhost:3000/api/v1/job
+```
+Expected response (fresh database):
+```text
+[]
+```
+
+### View logs
+To stream logs from all services:
+```bash
+docker compose logs -f
+```
+
+### Stop the services
+```bash
+docker compose stop
+```
+
+### Reset to clean state
+To remove all data and start fresh:
+```bash
+docker compose down -v # deletes volume so database is wiped
+docker compose up --build
+```
+---
+### Notes
+- The database is initialized automatically using environment variables
+- Migrations are executed by a dedicated `migrate` service to avoid race conditions
+- Service startup is coordinated using health checks to ensure PostgreSQL is ready before the application connects
