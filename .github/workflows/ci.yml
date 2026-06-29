@@ -5,10 +5,7 @@ on:
         branches:
             - main
         paths:
-            - 'app/src/**'
-            - 'app/package.json'
-            - 'app/package-lock.json'
-            - 'app/Dockerfile'
+            - 'app/**'
             - '.github/workflows/ci.yml'
 
 jobs:
