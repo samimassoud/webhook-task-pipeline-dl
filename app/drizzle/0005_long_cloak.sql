@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX "pipeline_callback_unique" ON "subscriptions" USING btree ("pipeline_id","callback_url");

@@ -1,0 +1,44 @@
+{
+  "name": "final-project",
+  "version": "1.0.0",
+  "description": "## 📌 Project Type",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev:api": "tsx watch src/api/index.ts",
+    "dev:worker": "tsx watch src/worker/index.ts",
+    "build": "tsc",
+    "start": "node dist/api/index.js",
+    "worker": "node dist/worker/index.js",
+    "serve": "npm run build && npm start",
+    "generate": "drizzle-kit generate",
+    "migrate": "drizzle-kit migrate",
+    "test": "vitest run",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@eslint/js": "^9.39.4",
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.3.3",
+    "drizzle-kit": "^0.31.9",
+    "eslint": "^9.39.4",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.57.1",
+    "vitest": "^4.1.0"
+  },
+  "dependencies": {
+    "dotenv": "^17.3.1",
+    "drizzle-orm": "^0.45.1",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.3.1",
+    "pg": "^8.19.0",
+    "postgres": "^3.4.8",
+    "uuid": "^13.0.0",
+    "zod": "^4.3.6"
+  }
+}

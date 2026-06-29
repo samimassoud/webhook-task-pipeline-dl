@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX "jobs_pipeline_payload_hash_idx" ON "jobs" USING btree ("pipeline_id","payload_hash");

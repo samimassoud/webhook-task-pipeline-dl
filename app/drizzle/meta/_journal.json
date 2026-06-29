@@ -1,0 +1,55 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1773153794072,
+      "tag": "0000_curved_christian_walker",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1773615800822,
+      "tag": "0001_powerful_white_queen",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1773616231698,
+      "tag": "0002_wet_dorian_gray",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1773625461090,
+      "tag": "0003_purple_surge",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1773785545982,
+      "tag": "0004_stormy_harry_osborn",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1773785902102,
+      "tag": "0005_long_cloak",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1773896921367,
+      "tag": "0006_daffy_jazinda",
+      "breakpoints": true
+    }
+  ]
+}

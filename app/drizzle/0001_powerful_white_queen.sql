@@ -1,0 +1,1 @@
+ALTER TABLE "jobs" ADD COLUMN "payload_hash" text NOT NULL;
