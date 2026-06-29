@@ -30,4 +30,4 @@ COPY --from=builder /app/dist ./dist
 
 EXPOSE 3000
 
-CMD ["node", "dist/api/index.js"]
+CMD ["echo", "Error: specify a command. Use node dist/api/index.js or node dist/worker/index.js"]

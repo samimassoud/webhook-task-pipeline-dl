@@ -30,6 +30,7 @@ services:
   api:
     build: ./app
     container_name: pipeline_api
+    command: sh -c "node dist/api/index.js"
     ports:
       - "3000:3000"
     environment:
