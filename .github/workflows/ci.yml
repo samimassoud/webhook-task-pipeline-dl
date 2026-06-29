@@ -58,4 +58,13 @@ jobs:
         working-directory: ./app
     steps:
       - uses: actions/checkout@v4
-      - run: docker build -t pipeline-app:ci .
+
+      - name: Set short SHA
+        run: echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
+        
+      - name: Build Docker image
+        run: |
+          docker build \
+            -t samimassoud/webhook-task-pipeline:latest \
+            -t samimassoud/webhook-task-pipeline:${{ env.SHORT_SHA }} \
+            .
