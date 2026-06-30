@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-configmap
+  namespace: webhook-task-pipeline
+data:
+  POSTGRES_USER: pipeline
+  POSTGRES_DB: pipeline_db
