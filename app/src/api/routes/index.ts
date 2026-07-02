@@ -8,5 +8,8 @@ const router = Router();
 router.use("/pipelines", pipelineRoutes);
 router.use("/jobs", jobRoutes);
 router.use("/webhooks", webhookRoutes);
-
+router.route("/healthz")
+    .get((req, res) => {
+        res.status(200).json({ status: "ok" });
+    });
 export default router;
