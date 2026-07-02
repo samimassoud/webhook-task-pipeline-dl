@@ -2,10 +2,11 @@ import "dotenv/config";
 
 import { runJobWorker } from './jobWorker.js';
 import { runWebhookWorker } from './webhookWorker.js';
+import { startServer } from "./server.js";
 
 async function main() {
     console.log('Worker process started');
-
+    startServer();
     // Run both loops concurrently — they never block each other
     await Promise.all([
         runJobWorker(),

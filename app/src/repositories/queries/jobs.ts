@@ -1,7 +1,7 @@
 import { eq, and, asc } from "drizzle-orm";
 import { db } from "../db.js";
 import { deliveryAttempts, jobs, NewJob } from "../schema.js";
-import { JobStatus } from "src/types/jobs.js";
+import { JobStatus } from "../../types/jobs.js";
 export async function listJobs(
     filters?: {
         pipelineId?: string;

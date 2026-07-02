@@ -1,0 +1,22 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrate
+  namespace: webhook-task-pipeline
+spec:
+  backoffLimit: 2
+  activeDeadlineSeconds: 120
+  ttlSecondsAfterFinished: 300
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: migrate
+          image: samimassoud/webhook-task-pipeline:builder
+          imagePullPolicy: IfNotPresent
+          command: ["npm", "run", "migrate"]
+          envFrom:
+            - configMapRef:
+                name: postgres-configmap
+            - secretRef:
+                name: postgres-secret
