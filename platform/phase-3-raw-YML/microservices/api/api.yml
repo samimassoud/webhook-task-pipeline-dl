@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: api
-          image: samimassoud/webhook-task-pipeline:latest
+          image: samimassoud/webhook-task-pipeline:v0.01
           imagePullPolicy: IfNotPresent
           command: ["node", "dist/api/index.js"]
           ports:

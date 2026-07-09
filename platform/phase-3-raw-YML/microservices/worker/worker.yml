@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: worker
-          image: samimassoud/webhook-task-pipeline:latest
+          image: samimassoud/webhook-task-pipeline:v0.01
           imagePullPolicy: IfNotPresent
           command: ["node", "dist/worker/index.js"]
           env:
