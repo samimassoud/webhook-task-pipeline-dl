@@ -51,3 +51,23 @@ or ensure they are ignored
 ```bash
 kubectl create -f <PATH_TO_PLAIN_SECRET_YAML>
 ```
+
+### 7. Backup the private key
+Bitnami Sealed Secrets controller follows the convention where it keeps its private RSA key that it uses for encrypting as a Kubernetes Secret in the namespace it was deployed in _kube-system in our case_.
+> If anything came up and you suddenly had to reinstall the controller, or set up the cluster again. Without a backup for the private key, all sealedSecrets in your source control will become undecryptable
+```bash
+kubectl get secrets -n kube-system
+```
+Example Output:
+```bash
+NAME                                   TYPE                 DATA   AGE
+sealed-secrets-keywxxxx                kubernetes.io/tls    2      24h
+```
+Backing it up:
+```bash
+kubectl get secret sealed-secrets-keywxxxx \
+-n kube-system \
+-o yaml \
+> sealed-secrets-key-backup.yaml
+```
+**The output contains the private key material and should never be pasted into logs, tickets, chat, or committed to Git**
