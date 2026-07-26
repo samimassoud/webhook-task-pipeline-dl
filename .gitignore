@@ -39,4 +39,9 @@ coverage/
 .temp/
 
 # Kubernetes
-postgres-secrets.yml
+**/postgres-secrets.*
+sealed-postgres-secret.*
+sealed-secrets-key-backup.*
+**/app-secrets.*
+**/admin-secrets.*
+rendered-postgres.yaml
