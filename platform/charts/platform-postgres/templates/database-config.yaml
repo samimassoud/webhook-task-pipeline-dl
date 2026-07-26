@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.configMap.name }}
+data:
+  database: {{ .Values.postgresql.auth.database | quote }}
+  username: {{ .Values.postgresql.auth.username | quote }}

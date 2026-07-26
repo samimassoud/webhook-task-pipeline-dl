@@ -1,0 +1,13 @@
+# platform-postgres/values.yaml
+
+# Configuration published for other platform components.
+configMap:
+  name: postgres-configs
+
+# Required database identity.
+# These are intentionally empty defaults and must be supplied
+# by the environment-specific values file.
+postgresql:
+  auth:
+    username: ""
+    database: ""
