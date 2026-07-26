@@ -1,0 +1,73 @@
+nameOverride: ""
+fullnameOverride: ""
+
+image:
+  repository: samimassoud/webhook-task-pipeline
+  tag: v0.01
+  pullPolicy: IfNotPresent
+
+sealedAppSecret:
+  encryptedDatabaseUrl: ""
+  name: ""
+sealedAdminSecret:
+  encryptedDatabaseUrl: ""
+  name: ""
+
+api:
+  enabled: true
+  replicaCount: 1 
+  port: 3000
+  service:
+    port: 80
+    targetPort: 3000
+
+  hpa:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 3
+    cpuUtilization: 80
+  
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+    limits:
+      memory: "256Mi"
+      cpu: "500m"
+
+
+worker:
+  replicaCount: 1
+  port: 3000
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+    limits:
+      memory: "256Mi"
+      cpu: "500m"
+
+migration:
+  enabled: true
+  image:
+    repository: samimassoud/webhook-task-pipeline
+    tag: builder
+    pullPolicy: IfNotPresent
+  
+  backoffLimit: 2
+  activeDeadlineSeconds: 120
+  ttlSecondsAfterFinished: 300
+
+postgres:
+  service:
+    name: postgres
+    port: 5432
+  database: webhook_task_pipeline
+  readinessCheck:
+    image:
+      repository: postgres
+      tag: "16-alpine"
+    intervalSeconds: 2
+
+gateway:
+  

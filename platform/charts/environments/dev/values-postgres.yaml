@@ -1,0 +1,36 @@
+# environments/dev/values-postgres.yaml
+
+postgresql:
+  fullnameOverride: postgres
+
+  auth:
+    username: app-user
+    database: webhook_task_pipeline
+    existingSecret: postgres-secret
+    # secretKeys:
+    #   adminPasswordKey: postgres-password
+    #   userPasswordKey: password
+    # Those are already the canonical Bitnami names. Check values.yaml line: 188
+
+  primary:
+    persistence:
+      enabled: true
+      size: 1Gi
+
+    resources:
+      requests:
+        memory: 128Mi
+        cpu: 100m
+      limits:
+        cpu: 250m
+        memory: 256Mi
+
+  readReplicas:
+    replicaCount: 0
+
+# DEFAULTS:
+  # backup.enabled: false (default)
+  # tls.enabled: false (default)
+  # ldap.enabled: false (default)
+  # ServiceAccount and RBAC kept default
+  # metrics.enabled: false (default) -- but we'll eventually want to enable this for monitoring and alerting

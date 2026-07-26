@@ -1,0 +1,119 @@
+# Envoy Gateway - Development Overrides
+#
+# Philosophy:
+# - Accept chart defaults unless we have a conscious reason to diverge.
+# - Keep the controller lightweight in development.
+# - Use production-grade defaults where they already make sense.
+# - Future production overrides should be driven by measured requirements,
+#   not by the existence of available configuration knobs.
+
+# Image
+# -----
+# Current chart default:
+#   docker.io/envoyproxy/gateway:v1.8.0
+#
+# Decision:
+#   Accept default.
+#
+# Reason:
+#   - Image is pinned.
+#   - No "latest" tag.
+#   - Aligns with the vendored chart version.
+#
+# Production Notes:
+#   - Keep images pinned.
+#   - Consider an internal image registry mirror.
+#   - Never use "latest".
+
+# Replicas
+# --------
+# Current chart default:
+#   deployment.replicas = 1
+#
+# Decision:
+#   Accept default.
+#
+# Reason:
+#   - Single-node development cluster.
+#   - No availability requirements.
+#
+# Production Notes:
+#   - Typically use 2+ replicas for controller availability.
+#   - Consider 3 replicas for higher resilience.
+
+# HPA
+# ---
+# Current chart default:
+#   hpa.enabled = false
+#
+# Decision:
+#   Accept default.
+#
+# Reason:
+#   - Controller workload is small in development.
+#   - Simpler operational model.
+#
+# Production Notes:
+#   - Evaluate enabling HPA after observing controller resource usage.
+#   - Typical starting point:
+#       minReplicas: 2
+#       maxReplicas: 5
+
+# Service Type
+# ------------
+# Current chart default:
+#   ClusterIP
+#
+# Decision:
+#   Accept default.
+#
+# Reason:
+#   - Envoy Gateway controller is internal-only.
+#   - Traffic enters through Envoy Proxy data plane resources.
+#
+# Production Notes:
+#   - ClusterIP is likely still appropriate.
+#   - External exposure should occur through Envoy Proxy services,
+#     not the controller.
+
+# Logging
+# -------
+# Current chart default:
+#   info
+#
+# Decision:
+#   Accept default.
+#
+# Reason:
+#   - Good balance between operational visibility and log volume.
+#
+# Production Notes:
+#   - Keep "info" under normal operation.
+#   - Temporarily switch to "debug" only when troubleshooting.
+
+# Resources
+# ---------
+# Current chart default:
+#   Requests:
+#     cpu: 100m
+#     memory: 256Mi
+#
+#   Limits:
+#     memory: 1024Mi
+#
+# Decision:
+#   Reduce memory footprint for development.
+#
+# Reason:
+#   - Conserves laptop or local cluster resources.
+#   - Current environment has minimal gateway traffic.
+
+deployment:
+  envoyGateway:
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+
+      limits:
+        memory: 512Mi

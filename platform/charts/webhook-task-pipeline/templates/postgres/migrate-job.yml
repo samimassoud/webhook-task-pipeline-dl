@@ -1,0 +1,41 @@
+{{- if .Values.migration.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "webhook-task-pipeline.fullname" . }}-migrate
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "webhook-task-pipeline.labels" . | nindent 4 }}
+spec:
+  backoffLimit: {{ .Values.migration.backoffLimit }}
+  activeDeadlineSeconds: {{ .Values.migration.activeDeadlineSeconds }}
+  ttlSecondsAfterFinished: {{ .Values.migration.ttlSecondsAfterFinished }}
+  template:
+    metadata:
+      labels:
+        {{- include "webhook-task-pipeline.selectorLabels" . | nindent 8 }}
+        app: migrate
+    spec:
+      restartPolicy: Never
+      initContainers:
+        - name: wait-for-postgres
+          image: "{{ .Values.postgres.readinessCheck.image.repository }}:{{ .Values.postgres.readinessCheck.image.tag }}"
+          imagePullPolicy: IfNotPresent
+          command:
+            - sh
+            - -c
+            - |
+              until pg_isready -h {{ .Values.postgres.service.name }} -p {{ .Values.postgres.service.port }}; do
+                echo "waiting for postgres to be ready..."
+                sleep {{ .Values.postgres.readinessCheck.intervalSeconds }}
+              done
+              echo "postgres is ready"
+      containers:
+        - name: migrate
+          image: {{ .Values.migration.image.repository }}:{{ .Values.migration.image.tag }}
+          imagePullPolicy: {{ .Values.migration.image.pullPolicy }}
+          command: ["npm", "run", "migrate"]
+          envFrom:
+            - secretRef:
+                name: {{ include "webhook-task-pipeline.adminSecretName" . }}
+{{- end }}
