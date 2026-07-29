@@ -45,3 +45,4 @@ sealed-secrets-key-backup.*
 **/app-secrets.*
 **/admin-secrets.*
 rendered-postgres.yaml
+postgresql
