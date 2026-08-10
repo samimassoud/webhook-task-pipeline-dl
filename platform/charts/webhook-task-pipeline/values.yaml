@@ -70,4 +70,6 @@ postgres:
     intervalSeconds: 2
 
 gateway:
-  
+  parentRef:
+    name: ""
+    namespace: ""
