@@ -46,3 +46,5 @@ sealed-secrets-key-backup.*
 **/admin-secrets.*
 rendered-postgres.yaml
 postgresql
+crossplane
+values-crossplane.yaml
