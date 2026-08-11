@@ -49,7 +49,7 @@ jobs:
         run: helm dependency build charts/${{ matrix.chart }}
 
       - name: Lint chart
-        run: helm lint charts/${{ matrix.chart }} --values ${{ matrix.values }}
+        run: helm lint charts/${{ matrix.chart }} --values environments/dev/values-shared.yaml --values ${{ matrix.values }}
 
   helm-render:
     name: Render ${{ matrix.chart }}
@@ -89,6 +89,7 @@ jobs:
           helm template \
             ${{ matrix.chart }} \
             charts/${{ matrix.chart }} \
+            --values environments/dev/values-shared.yaml \
             --values ${{ matrix.values }} \
             --namespace webhook-task-pipeline \
             --output-dir rendered/${{ matrix.chart }}
