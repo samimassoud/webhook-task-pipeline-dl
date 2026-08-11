@@ -1,0 +1,30 @@
+image:
+  tag: v0.01 # WILL CHANGE TO WHATEVER THE IMAGE PROMOTION SCHEME WILL BE
+
+api:
+  replicaCount: 1
+  port: 3000
+  service:
+    port: 80
+    targetPort: 3000
+  hpa:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 3
+    cpuUtilization: 80
+  
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+    limits:
+      memory: "256Mi"
+      cpu: "500m"
+
+sealedAppSecret:
+  name: "app-secret"
+
+gateway:
+  parentRef:
+    name: "platform-gateway"
+    namespace: "platform-gateway"
