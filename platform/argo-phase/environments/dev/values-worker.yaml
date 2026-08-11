@@ -1,0 +1,17 @@
+sealedAppSecret:
+  name: "app-secret"
+
+image:
+  tag: v0.01 # WILL CHANGE TO WHATEVER THE IMAGE PROMOTION SCHEME WILL BE
+
+worker:
+  replicaCount: 1
+  port: 3000
+
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+    limits:
+      memory: "256Mi"
+      cpu: "500m"

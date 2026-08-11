@@ -1,0 +1,48 @@
+# Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "webhook-task-pipeline.fullname" . }}-worker
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "webhook-task-pipeline.labels" . | nindent 4 }}
+    app: worker
+spec:
+  replicas: {{ .Values.worker.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "webhook-task-pipeline.selectorLabels" . | nindent 6 }}
+      app: worker
+  template:
+    metadata:
+      labels:
+        {{- include "webhook-task-pipeline.selectorLabels" . | nindent 8 }}
+        app: worker
+    spec:
+      containers:
+        - name: worker
+          image: {{ include "webhook-task-pipeline.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["node", "dist/worker/index.js"]
+          envFrom:
+            - secretRef:
+                name: {{ include "webhook-task-pipeline.appSecretName" . }}
+          ports:
+            - containerPort: {{ .Values.worker.port }}
+          resources:
+            {{- toYaml .Values.worker.resources | nindent 12 }}
+          readinessProbe:
+            httpGet:
+              path: /api/v1/healthz
+              port: {{ .Values.worker.port }}
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            failureThreshold: 3
+            timeoutSeconds: 5
+          livenessProbe:
+            tcpSocket:
+              port: {{ .Values.worker.port }}
+            initialDelaySeconds: 15
+            periodSeconds: 20
+            timeoutSeconds: 3
+            failureThreshold: 3
