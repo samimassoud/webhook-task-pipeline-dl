@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": [
+    "configMap",
+    "postgresql"
+  ],
+  "properties": {
+    "configMap": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Name of the ConfigMap that publishes PostgreSQL connection metadata."
+        }
+      }
+    },
+    "postgresql": {
+      "type": "object",
+      "required": [
+        "auth"
+      ],
+      "properties": {
+        "auth": {
+          "type": "object",
+          "required": [
+            "username",
+            "database"
+          ],
+          "properties": {
+            "username": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Application PostgreSQL role consumed by runtime components."
+            },
+            "database": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Application PostgreSQL database name."
+            }
+          }
+        }
+      }
+    }
+  }
+}
