@@ -1,0 +1,24 @@
+sealedAdminSecret:
+  name: "admin-secret"
+
+migration:
+  enabled: true
+
+  image:
+    tag: builder # WILL CHANGE TO WHATEVER THE IMAGE PROMOTION SCHEME WILL BE
+    pullPolicy: IfNotPresent
+  
+  backoffLimit: 2
+  activeDeadlineSeconds: 120
+  ttlSecondsAfterFinished: 300
+
+postgres:
+  service:
+    name: postgres
+    port: 5432
+  database: webhook_task_pipeline
+  readinessCheck:
+    image:
+      repository: postgres
+      tag: "16-alpine"
+    intervalSeconds: 2
