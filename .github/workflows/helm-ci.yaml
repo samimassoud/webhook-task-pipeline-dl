@@ -123,5 +123,6 @@ jobs:
             -strict
             -summary
             -output pretty
+            -ignore-missing-schemas
             -kubernetes-version 1.33.0
             rendered
