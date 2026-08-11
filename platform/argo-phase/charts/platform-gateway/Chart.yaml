@@ -1,0 +1,13 @@
+apiVersion: v2
+name: platform-gateway
+description: Shared Gateway API infrastructure for the platform, including the Envoy Gateway controller
+type: application
+
+dependencies:
+  - name: gateway-helm
+    version: 1.8.3
+    repository: "oci://docker.io/envoyproxy"
+
+version: 0.1.0
+
+appVersion: "0.1.0"
