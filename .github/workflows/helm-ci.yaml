@@ -1,0 +1,126 @@
+name: Helm CI
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'platform/argo-phase/charts/**'
+      - 'platform/argo-phase/environments/**'
+      - '.github/workflows/helm-ci.yaml'
+
+permissions:
+  contents: read
+
+env:
+  HELM_VERSION: v4.2.0
+
+jobs:
+  helm-lint:
+    name: Lint ${{ matrix.chart }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - chart: api
+            values: environments/dev/values-api.yaml
+          - chart: worker
+            values: environments/dev/values-worker.yaml
+          - chart: platform-gateway
+            values: environments/dev/values-envoy-gateway.yaml
+          - chart: platform-postgres
+            values: environments/dev/values-platform-postgres.yaml
+
+    defaults:
+      run:
+        working-directory: platform/argo-phase
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: ${{ env.HELM_VERSION }}
+
+      - name: Build chart dependencies
+        run: helm dependency build charts/${{ matrix.chart }}
+
+      - name: Lint chart
+        run: helm lint charts/${{ matrix.chart }} --values ${{ matrix.values }}
+
+  helm-render:
+    name: Render ${{ matrix.chart }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - chart: api
+            values: environments/dev/values-api.yaml
+          - chart: worker
+            values: environments/dev/values-worker.yaml
+          - chart: platform-gateway
+            values: environments/dev/values-envoy-gateway.yaml
+          - chart: platform-postgres
+            values: environments/dev/values-platform-postgres.yaml
+
+    defaults:
+      run:
+        working-directory: platform/argo-phase
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: ${{ env.HELM_VERSION }}
+
+      - name: Build chart dependencies
+        run: helm dependency build charts/${{ matrix.chart }}
+
+      - name: Render chart
+        run: |
+          helm template \
+            ${{ matrix.chart }} \
+            charts/${{ matrix.chart }} \
+            --values ${{ matrix.values }} \
+            --namespace webhook-task-pipeline \
+            --output-dir rendered/${{ matrix.chart }}
+
+      - name: Upload rendered manifests
+        uses: actions/upload-artifact@v4
+        with:
+          name: rendered-${{ matrix.chart }}
+          path: platform/argo-phase/rendered/${{ matrix.chart }}
+
+  manifest-validation:
+    name: Validate rendered manifests
+    runs-on: ubuntu-latest
+    needs: helm-render
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download rendered manifests
+        uses: actions/download-artifact@v4
+        with:
+          pattern: rendered-*
+          path: rendered
+          merge-multiple: true
+
+      - name: Validate Kubernetes manifests
+        uses: docker://ghcr.io/yannh/kubeconform:latest
+        with:
+          args: >-
+            -strict
+            -summary
+            -output pretty
+            -kubernetes-version 1.33.0
+            rendered
