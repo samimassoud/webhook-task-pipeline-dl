@@ -1,0 +1,28 @@
+nameOverride: ""
+fullnameOverride: "app"
+
+image:
+  repository: samihajji/webhook-task-pipeline
+  tag: builder
+  pullPolicy: IfNotPresent
+
+sealedAdminSecret:
+  name: ""
+
+migration:
+  enabled: true
+  
+  backoffLimit: 2
+  activeDeadlineSeconds: 120
+  ttlSecondsAfterFinished: 300
+
+postgres:
+  service:
+    name: postgres
+    port: 5432
+  database: webhook_task_pipeline
+  readinessCheck:
+    image:
+      repository: postgres
+      tag: "16-alpine"
+    intervalSeconds: 2

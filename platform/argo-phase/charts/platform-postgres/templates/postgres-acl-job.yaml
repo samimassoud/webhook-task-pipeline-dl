@@ -1,0 +1,89 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: postgres-acl-bootstrap
+  namespace: webhook-task-pipeline
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  backoffLimit: 3
+  ttlSecondsAfterFinished: 300
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - name: postgres-acl-bootstrap
+        image: postgres:17-alpine
+        imagePullPolicy: IfNotPresent
+
+        env:
+          - name: PGHOST
+            value: postgres
+          
+          - name: PGUSER
+            value: postgres
+          
+          - name: PGPORT
+            value: "5432"
+          
+          - name: PGDATABASE
+            value: {{ .Values.postgresql.auth.database | quote }}
+          - name: APP_USERNAME
+            value: {{ .Values.postgresql.auth.username | quote }}
+          
+          - name: PGPASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: postgres-secret
+                key: postgres-password
+        command:
+          - /bin/sh
+          - -ec
+          - |
+            echo "Waiting for PostgreSQL..."
+
+            until pg_isready \
+              -h "$PGHOST" \
+              -p "$PGPORT" \
+              -U "$PGUSER" \
+              -d "$PGDATABASE"
+            do
+              sleep 2
+            done
+
+            echo "PostgreSQL is ready."
+
+            echo "Granting privileges to $APP_USERNAME on $PGDATABASE..."
+
+            psql \
+              -U "$PGUSER" \
+              -v ON_ERROR_STOP=1 \
+              -d "$PGDATABASE" \
+              -v app_username="$APP_USERNAME" \
+              -v db_name="$PGDATABASE" \
+              <<'SQL'
+
+            GRANT CONNECT ON DATABASE :"db_name" TO :"app_username";
+
+            GRANT USAGE ON SCHEMA public TO :"app_username";
+
+            GRANT SELECT, INSERT, UPDATE, DELETE
+            ON ALL TABLES IN SCHEMA public
+            TO :"app_username";
+
+            GRANT USAGE, SELECT, UPDATE
+            ON ALL SEQUENCES IN SCHEMA public
+            TO :"app_username";
+
+            ALTER DEFAULT PRIVILEGES IN SCHEMA public
+            GRANT SELECT, INSERT, UPDATE, DELETE
+            ON TABLES TO :"app_username";
+
+            ALTER DEFAULT PRIVILEGES IN SCHEMA public
+            GRANT USAGE, SELECT, UPDATE
+            ON SEQUENCES TO :"app_username";
+
+            SQL
+
+            echo "PostgreSQL ACL bootstrap completed successfully."

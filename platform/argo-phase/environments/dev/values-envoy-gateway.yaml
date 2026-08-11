@@ -1,0 +1,26 @@
+gatewayClass:
+  controllerName: "gateway.envoyproxy.io/gatewayclass-controller"
+  name: "envoy-gateway-class"
+gateway:
+  name: platform-gateway
+  namespace: platform-gateway
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 80
+      hostname: ""
+
+      allowedRoutes:
+        namespaces:
+          from: All
+        
+gateway-helm:
+  deployment:
+    envoyGateway:
+      resources:
+        requests:
+          cpu: 100m
+          memory: 128Mi
+
+        limits:
+          memory: 512Mi

@@ -1,0 +1,32 @@
+nameOverride: ""
+fullnameOverride: "app"
+
+image:
+  repository: ""
+  tag: ""
+  pullPolicy: ""
+
+sealedAppSecret:
+  name: ""
+
+worker:
+  replicaCount: 1
+  port: 3000
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+    limits:
+      memory: "256Mi"
+      cpu: "500m"
+
+postgres:
+  service:
+    name: postgres
+    port: 5432
+  database: webhook_task_pipeline
+  readinessCheck:
+    image:
+      repository: postgres
+      tag: "16-alpine"
+    intervalSeconds: 2

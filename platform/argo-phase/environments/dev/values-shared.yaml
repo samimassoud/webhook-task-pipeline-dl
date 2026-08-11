@@ -1,0 +1,3 @@
+image:
+  repository: samihajji/webhook-task-pipeline
+  pullPolicy: IfNotPresent

@@ -1,0 +1,91 @@
+# Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "webhook-task-pipeline.fullname" .}}-api
+  namespace: {{ .Release.Namespace}}
+  labels:
+    {{- include "webhook-task-pipeline.labels" . | nindent 4 }}
+    app: api
+spec:
+  replicas: {{ .Values.api.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "webhook-task-pipeline.selectorLabels" . | nindent 6 }}
+      app: api
+  template:
+    metadata:
+      labels:
+        {{- include "webhook-task-pipeline.selectorLabels" . | nindent 8 }}
+        app: api
+    spec:
+      containers:
+        - name: api
+          image: {{ include "webhook-task-pipeline.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["node", "dist/api/index.js"]
+          ports:
+            - containerPort: {{ .Values.api.port }}
+          envFrom:
+            - secretRef:
+                name: {{ include "webhook-task-pipeline.appSecretName" .}}
+          resources:
+            {{- toYaml .Values.api.resources | nindent 12}}
+          readinessProbe:
+            httpGet:
+              path: /api/v1/healthz
+              port: {{ .Values.api.port }}
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            failureThreshold: 3
+          livenessProbe:
+            tcpSocket:
+              port: {{ .Values.api.port }}
+            initialDelaySeconds: 15
+            periodSeconds: 20
+            timeoutSeconds: 5
+            failureThreshold: 3
+---
+# Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "webhook-task-pipeline.fullname" . }}-api
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "webhook-task-pipeline.labels" . | nindent 4 }}
+    app: api
+spec:
+  type: ClusterIP
+  selector:
+    {{- include "webhook-task-pipeline.selectorLabels" . | nindent 4 }}
+    app: api
+  ports:
+    - protocol: TCP
+      port: {{ .Values.api.service.port }}
+      targetPort: {{ .Values.api.service.targetPort }}
+---
+# Horizontal Pod Autoscaler
+{{- if .Values.api.hpa.enabled}}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "webhook-task-pipeline.fullname" . }}-api
+  namespace: {{ .Release.Namespace}}
+  labels:
+    {{- include "webhook-task-pipeline.labels" . | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "webhook-task-pipeline.fullname" . }}-api
+  minReplicas: {{ .Values.api.hpa.minReplicas }}
+  maxReplicas: {{ .Values.api.hpa.maxReplicas }}
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.api.hpa.cpuUtilization }}
+{{- end }}

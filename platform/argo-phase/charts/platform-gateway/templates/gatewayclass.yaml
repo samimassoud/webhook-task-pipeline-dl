@@ -1,0 +1,9 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: {{ include "platform-gateway.gatewayClassName" . }}
+  labels:
+    {{- include "platform-gateway.labels" . | nindent 4 }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  controllerName: {{ .Values.gatewayClass.controllerName | quote }}
