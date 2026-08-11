@@ -1,5 +1,7 @@
 # platform-postgres/values.yaml
-
+sealedAdminSecret:
+  encryptedDatabaseUrl: ""
+  name: ""
 # Configuration published for other platform components.
 configMap:
   name: postgres-configs
