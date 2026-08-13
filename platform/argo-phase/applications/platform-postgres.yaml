@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: platform-gateway
+  name: platform-postgres
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "0"
@@ -12,20 +12,20 @@ spec:
   source:
     repoURL: https://github.com/samimassoud/webhook-task-pipeline-dl.git
     targetRevision: main
-    path: platform/argo-phase/charts/platform-gateway
+    path: platform/argo-phase/charts/platform-postgres
 
     helm:
       valueFiles:
-        - ../../environments/dev/values-envoy-gateway.yaml
+        - ../../environments/dev/values-platform-postgres.yaml
 
   destination:
     server: https://kubernetes.default.svc
-    namespace: platform-gateway
-  
+    namespace: webhook-task-pipeline
+
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
-    
+
     syncOptions:
       - CreateNamespace=true
