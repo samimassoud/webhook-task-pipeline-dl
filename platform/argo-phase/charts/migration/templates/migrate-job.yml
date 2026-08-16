@@ -33,7 +33,7 @@ spec:
       containers:
         - name: migrate
           image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
-          imagePullPolicy: {{ .Values.migration.image.pullPolicy }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: ["npm", "run", "migrate"]
           envFrom:
             - secretRef:
