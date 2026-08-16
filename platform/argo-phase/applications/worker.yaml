@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: api
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "10"
+
+spec:
+  project: platform
+
+  source:
+    repoURL: https://github.com/samimassoud/webhook-task-pipeline-dl.git
+    targetRevision: main
+    path: platform/argo-phase/charts/worker
+
+    helm:
+      valueFiles:
+        - ../../environments/dev/values-worker.yaml
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: webhook-task-pipeline
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
