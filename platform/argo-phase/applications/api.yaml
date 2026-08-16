@@ -17,6 +17,7 @@ spec:
     helm:
       valueFiles:
         - ../../environments/dev/values-api.yaml
+        - ../../environments/dev/values-shared.yaml
 
   destination:
     server: https://kubernetes.default.svc
