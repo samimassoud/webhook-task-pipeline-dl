@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: migration
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "5"
+
+spec:
+  project: platform
+
+  source:
+    repoURL: https://github.com/samimassoud/webhook-task-pipeline-dl.git
+    targetRevision: main
+    path: platform/argo-phase/charts/migration
+
+    helm:
+      valueFiles:
+        - ../../environments/dev/values-migration.yaml
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: webhook-task-pipeline
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
+    syncOptions:
+      - ServerSideApply=true
