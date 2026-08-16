@@ -3,8 +3,6 @@ kind: Application
 metadata:
   name: api
   namespace: argocd
-  annotations:
-    argocd.argoproj.io/sync-wave: "10"
 
 spec:
   project: platform
@@ -13,7 +11,6 @@ spec:
     repoURL: https://github.com/samimassoud/webhook-task-pipeline-dl.git
     targetRevision: main
     path: platform/argo-phase/charts/api
-
     helm:
       valueFiles:
         - ../../environments/dev/values-api.yaml
@@ -22,6 +19,16 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: webhook-task-pipeline
+
+  ignoreDifferences:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      jsonPointers:
+        - /spec/parentRefs/0/group
+        - /spec/parentRefs/0/kind
+        - /spec/rules/0/backendRefs/0/group
+        - /spec/rules/0/backendRefs/0/kind
+        - /spec/rules/0/backendRefs/0/weight
 
   syncPolicy:
     automated:
