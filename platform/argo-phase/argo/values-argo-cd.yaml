@@ -1,0 +1,56 @@
+global:
+  domain: argocd.dev.local
+
+configs:
+  secret:
+    createSecret: false
+  
+  cm:
+    admin.enabled: true
+  
+  params:
+    server.insecure: true
+
+dex:
+  enabled: false
+
+redis-ha:
+  enabled: false
+
+controller:
+  replicas: 1
+
+repoServer:
+  replicas: 1
+
+server:
+  replicas: 1
+
+  service:
+    type: ClusterIP
+
+  ingress:
+    enabled: false
+
+  ingressGrpc:
+    enabled: false
+
+  httproute:
+    enabled: true
+
+    parentRefs:
+      - name: platform-gateway
+        namespace: platform-gateway
+
+    hostnames:
+      - argocd.dev.local
+redis:
+  enabled: true
+
+notifications:
+  enabled: false
+
+syncPolicy:
+  automated:
+    prune: true
+    selfHeal: true
