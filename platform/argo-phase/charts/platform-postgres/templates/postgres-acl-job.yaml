@@ -4,8 +4,7 @@ metadata:
   name: postgres-acl-bootstrap
   namespace: webhook-task-pipeline
   annotations:
-    "helm.sh/hook": post-install,post-upgrade
-    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    argocd.argoproj.io/sync-wave: "10"
 spec:
   backoffLimit: 3
   ttlSecondsAfterFinished: 300
