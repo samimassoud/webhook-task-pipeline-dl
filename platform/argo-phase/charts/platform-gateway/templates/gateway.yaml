@@ -5,6 +5,8 @@ metadata:
   namespace: {{ include "platform-gateway.gatewayNamespace" . }}
   labels:
     {{- include "platform-gateway.labels" . | nindent 4 }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
 spec:
   gatewayClassName: {{ include "platform-gateway.gatewayClassName" . }}
 
