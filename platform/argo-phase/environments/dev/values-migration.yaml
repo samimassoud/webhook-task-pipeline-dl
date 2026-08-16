@@ -4,9 +4,9 @@ sealedAdminSecret:
 migration:
   enabled: true
 
-  image:
-    tag: builder # WILL CHANGE TO WHATEVER THE IMAGE PROMOTION SCHEME WILL BE
-    pullPolicy: IfNotPresent
+image:
+  tag: builder # WILL CHANGE TO WHATEVER THE IMAGE PROMOTION SCHEME WILL BE
+  pullPolicy: IfNotPresent
   
   backoffLimit: 2
   activeDeadlineSeconds: 120
