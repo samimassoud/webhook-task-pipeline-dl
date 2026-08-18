@@ -8,6 +8,7 @@ spec:
 
   sourceRepos:
     - 'https://github.com/samimassoud/webhook-task-pipeline-dl.git'
+    - 'https://charts.jetstack.io'
 
   destinations:
     - namespace: '*'
