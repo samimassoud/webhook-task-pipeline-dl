@@ -13,7 +13,22 @@ gateway:
       allowedRoutes:
         namespaces:
           from: All
-        
+
+    - name: https
+      protocol: HTTPS
+      port: 443
+      hostname: ""
+
+      allowedRoutes:
+        namespaces:
+          from: All
+
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: argocd-server-tls
+            kind: Secret
+            group: core
 gateway-helm:
   deployment:
     envoyGateway:
