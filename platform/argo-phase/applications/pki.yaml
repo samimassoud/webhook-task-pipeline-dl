@@ -1,22 +1,18 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: cert-manager
+  name: cert-manager-pki
   annotations:
-    argocd.argoproj.io/sync-wave: "-20"
+    argocd.argoproj.io/sync-wave: "-10"
 spec:
   project: platform
   source:
-    repoURL: https://charts.jetstack.io
-    chart: cert-manager
-    targetRevision: v1.18.2
-    helm:
-      parameters:
-        - name: crds.enabled
-          value: "true"
+    repoURL: https://github.com/samimassoud/webhook-task-pipeline-dl.git
+    targetRevision: main
+    path: platform/argo-phase/platform/pki
   destination:
     server: https://kubernetes.default.svc
-    namespace: cert-manager
+    namespace: pki
   syncPolicy:
     automated:
       prune: false
