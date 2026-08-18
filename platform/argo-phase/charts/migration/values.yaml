@@ -12,7 +12,7 @@ sealedAdminSecret:
 migration:
   enabled: true
   
-  backoffLimit: 2
+  backoffLimit: 0
   activeDeadlineSeconds: 120
   ttlSecondsAfterFinished: 300
 
