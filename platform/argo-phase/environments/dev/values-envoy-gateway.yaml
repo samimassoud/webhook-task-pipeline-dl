@@ -28,7 +28,7 @@ gateway:
         certificateRefs:
           - name: argocd-server-tls
             kind: Secret
-            group: core
+            group: ""
 gateway-helm:
   deployment:
     envoyGateway:

@@ -23,4 +23,17 @@ spec:
       allowedRoutes:
         namespaces:
           from: {{ .allowedRoutes.namespaces.from }}
+      {{- if .tls}}
+      tls:
+        mode: {{ .tls.mode }}
+        
+        {{- with .tls.certificateRefs }}
+        certificateRefs:
+          {{- range . }}
+          - name: {{ .name }}
+            kind: {{ .kind }}
+            group: {{ .group }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
     {{- end }}
