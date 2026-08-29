@@ -11,6 +11,10 @@ spec:
     chart: kube-prometheus-stack
     targetRevision: 88.5.4
 
+    helm:
+      valuesFiles:
+        - ../../environments/dev/values-kube-prom-stack.yaml
+    
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring
