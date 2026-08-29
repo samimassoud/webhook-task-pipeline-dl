@@ -19,10 +19,6 @@ spec:
       targetRevision: main
       ref: values
 
-    - repoURL: https://github.com/samimassoud/webhook-task-pipeline-dl.git
-      targetRevision: main
-      path: platform/argo-phase/platform/kube-prom-stack
-
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring
