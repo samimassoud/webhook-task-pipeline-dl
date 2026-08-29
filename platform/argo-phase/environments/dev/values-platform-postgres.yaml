@@ -34,6 +34,8 @@ postgresql:
   readReplicas:
     replicaCount: 0
 
+  volumePermissions:
+    enabled: true
 # DEFAULTS:
   # backup.enabled: false (default)
   # tls.enabled: false (default)
