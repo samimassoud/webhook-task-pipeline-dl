@@ -6,15 +6,23 @@ metadata:
 spec:
   project: platform
 
-  source:
-    repoURL: https://prometheus-community.github.io/helm-charts
-    chart: kube-prometheus-stack
-    targetRevision: 88.5.4
+  sources:
+    - repoURL: https://prometheus-community.github.io/helm-charts
+      chart: kube-prometheus-stack
+      targetRevision: 88.5.4
 
-    helm:
-      valuesFiles:
-        - ../../environments/dev/values-kube-prom-stack.yaml
+      helm:
+        valuesFiles:
+          - $values/platform/argo-phase/environments/dev/values-kube-prom-stack.yaml
     
+    - repoURL: https://github.com/samimassoud/webhook-task-pipeline-dl.git
+      targetRevision: main
+      ref: values
+
+    - repoURL: https://github.com/samimassoud/webhook-task-pipeline-dl.git
+      targetRevision: main
+      path: platform/argo-phase/platform/kube-prom-stack
+
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring
