@@ -12,7 +12,7 @@ spec:
       targetRevision: 88.5.4
 
       helm:
-        valuesFiles:
+        valueFiles:
           - $values/platform/argo-phase/environments/dev/values-kube-prom-stack.yaml
     
     - repoURL: https://github.com/samimassoud/webhook-task-pipeline-dl.git
