@@ -9,6 +9,7 @@ spec:
   sourceRepos:
     - 'https://github.com/samimassoud/webhook-task-pipeline-dl.git'
     - 'https://charts.jetstack.io'
+    - 'https://prometheus-community.github.io/helm-charts'
 
   destinations:
     - namespace: '*'
