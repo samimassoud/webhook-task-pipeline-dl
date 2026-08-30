@@ -49,11 +49,11 @@ grafana:
     passwordKey: admin-password
   resources:
     requests:
-      cpu: "50m"
-      memory: "128Mi"
-    limits:
-      cpu: "200m"
+      cpu: "100m"
       memory: "256Mi"
+    limits:
+      cpu: "500m"
+      memory: "1Gi"
 
 prometheus-node-exporter:
   resources:
