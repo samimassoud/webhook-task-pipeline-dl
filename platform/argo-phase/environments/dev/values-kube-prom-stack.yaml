@@ -54,6 +54,26 @@ grafana:
     limits:
       cpu: "500m"
       memory: "1Gi"
+  
+  grafana.ini:
+    server:
+      root_url: "https://grafana.dev.local"
+  
+  route:
+    main:
+      enabled: true
+      apiVersion: gateway.networking.k8s.io/v1
+      kind: HTTPRoute
+      parentRefs:
+        - name: platform-gateway
+          namespace: platform-gateway
+      hostnames:
+        - grafana.dev.local
+      
+      matches:
+        - path:
+            type: PathPrefix
+            value: /
 
 prometheus-node-exporter:
   resources:

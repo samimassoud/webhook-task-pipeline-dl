@@ -11,6 +11,7 @@ spec:
   dnsNames:
     - argocd.dev.local
     - grpc.argocd.dev.local
+    - grafana.dev.local
 
   duration: 2160h # 90 days
 
