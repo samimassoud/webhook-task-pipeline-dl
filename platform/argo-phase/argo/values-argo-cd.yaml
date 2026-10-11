@@ -4,10 +4,22 @@ global:
 configs:
   secret:
     createSecret: false
-  
+
   cm:
     admin.enabled: true
-  
+
+    resource.customizations.health.monitoring.coreos.com_Prometheus: |
+      hs = {}
+      hs.status = "Healthy"
+      hs.message = "Prometheus health check overridden"
+      return hs
+
+    resource.customizations.health.monitoring.coreos.com_Alertmanager: |
+      hs = {}
+      hs.status = "Healthy"
+      hs.message = "Alertmanager health check overridden"
+      return hs
+
   params:
     server.insecure: true
 
@@ -44,13 +56,23 @@ server:
 
     hostnames:
       - argocd.dev.local
+
+  grpcroute:
+    enabled: true
+
+    parentRefs:
+      - name: platform-gateway
+        namespace: platform-gateway
+
+    hostnames:
+      - grpc.argocd.dev.local
+
+    rules:
+      - backendRefs:
+          - name: argocd-server
+            port: 80
 redis:
   enabled: true
 
 notifications:
   enabled: false
-
-syncPolicy:
-  automated:
-    prune: true
-    selfHeal: true

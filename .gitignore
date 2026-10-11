@@ -48,3 +48,6 @@ rendered-postgres.yaml
 postgresql
 crossplane
 values-crossplane.yaml
+secret.yaml
+dockerhub-secret.yaml
+grafana-admin-credentials.yaml
